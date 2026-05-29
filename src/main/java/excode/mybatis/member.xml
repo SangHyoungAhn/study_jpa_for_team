@@ -1,0 +1,14 @@
+
+<mapper namespace="member">
+    <select id="findByNameAge" resultType="Member">
+        select id, name, age, address
+        from member
+        where name = #{name} AND age = #{age}
+    </select>
+
+    <update id="updateAddress">
+        update member
+        set address = #{address}
+        where id = #{id}
+    </update>
+</mapper>
