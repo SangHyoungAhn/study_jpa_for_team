@@ -31,8 +31,7 @@ public class HelloRestController {
 
     @PostMapping("/api/v2/members")
     public ResponseEntity<MemberDto> joinMember(@RequestBody MemberDto requestDto) {
-        // 1. 비즈니스 로직 수행 (가정)
-        // 2. 응답 봉투 만들기
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(requestDto);
@@ -40,8 +39,7 @@ public class HelloRestController {
 
     @PostMapping("/api/v3/members")
     public ResponseEntity<String> joinMemberV3(@RequestBody MemberDto requestDto) {
-        // 1. 비즈니스 로직 수행 (가정)
-        // 2. 응답 봉투 만들기
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(requestDto.getName() + "정보가 등록되었습니다.");

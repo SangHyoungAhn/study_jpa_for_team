@@ -1,6 +1,6 @@
-package excode.dao;
+package excodeMyBatis.dao;
 
-import excode.model.Member;
+import excodeMyBatis.model.Member;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
