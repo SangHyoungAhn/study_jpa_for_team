@@ -1,4 +1,4 @@
-package com.example.spring.studyjpa.vo_dto_ex;
+package vo_dto_ex;
 
 import java.util.Objects;
 

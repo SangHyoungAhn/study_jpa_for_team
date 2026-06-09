@@ -1,0 +1,82 @@
+
+**
+      #  show_sql: true
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+    
+log파일로 만들어주기때문에, show_sql x
+
+@GeneratedValue
+sequence를 JPA가 알아서한다고 생각하고 쓰기.
+
+JPA 표준 명세는 프록시 기술 등을 위해 엔티티 클래스에 접근 제한자가 protected 이상인 기본 생성자가 있어야 한다고 요구.
+
+**
+연관관계 필드는 toString 안하는게 좋음.
+@ToString(of={"id","username","age"})
+em.persist
+이후, em.flush()하면 insert
+
+**
+단건인 경우, getSingleResult()
+
+**
+@PersistenceContext
+private EntityManager em;
+
+**
+메서드 이름을 가지고 하는 강력한 기능
+
+***
+@NamedQuery 실무에서 잘 사용하지 않음.
+@Entity 위에 있는 것도 조금 번거롭고,
+
+***
+@Query / QueryMethod 생성하는 기능
+loading (실행하기전) 해당 내용을 미리 감지
+
+***
+QueryMethod에 대한건 간단간단한 경우에 대해서 사용.
+좀 복잡해진다. @Query 복잡한 정적 쿼리
+동적쿼리는 queryDSL
+
+***
+JPA 반환타입은 다양
+List<Member> findListByUsername(String username) // 컬렉션
+Member findMemberByUsername(String username)
+// 단건
+Optional<Member> findMemberByUsername(String username) //단건 Optional
+
+컬렉션 조회할때, null 인경우, empty collection
+단건 조회할때, null 인 경우, null
+(보통의 JPA는 NoResultException
+SpringData JPA는 null 반환)
+이 논쟁은 java8 이후, Optional 등장으로 마무리
+
+단건 조회할때(Optional) 데이터 2개일때,
+원래 NonUniqueResultException / 
+SpringDataJpa -> IncorrectResultSizeDataAccessException
+
+***
+JPA Paging
+Slice 는 또 Page랑 다르고 limit + 1
+totalCount - 결국 count 하는거기때문에, 오래걸림
+
+- Page Index가 SpringData JPA는 0 부터 시작
+
+```java
+Page<MemberDto> toMape = page.map(member-> new MemberDto(member.getId(), member.getUsername()))
+```
+
+벌크성 수정쿼리
+
+```java
+ @Modifying
+```
+
+@Modifying이 우리가 아는 update 시, executeUpdate()
+
+
+

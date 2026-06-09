@@ -2,7 +2,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.example.spring.studyjpa.vo_dto_ex.PasswordVO;
+import vo_dto_ex.PasswordVO;
 
 class RegisterPersonTest {
     

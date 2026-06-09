@@ -1,0 +1,165 @@
+
+**
+@Controller @Responsebody => @RestController
+
+검증로직이 PresentationLayer까지 침투?
+
+**
+Api스펙에서 엔터티에 직접 매핑이 되는 구조는 안좋은구조
+따라서 DTO (Data Transfer Object) 따로 생성해서 작업
+큰 장애 위험
+
+엔티티를 파라미터로 받지말기.
+엔티티를 외부에 노출 X ** (엔티티 수정 -> API 스펙 변경)
+
+**
+request, reponse 별도의 객체로 생성하기
+엔티티와 매핑이 되어있으면, API 문서를 통해서 봐야지 parameter 값을 확인해야됨
+
+**
+Restful Api Style
+
+**
+멱등하다 Put -> 같은것을 여러번 호출해도 동일하다
+DTO에서는 @ 어노테이션 많이 사용 (데이터 통신용) 실용주의
+
+**
+Command 와 Query는 철저히 분리하자
+ex)
+memberService.update(id, request.getName()); //cmd
+Member findMember = memberService.findOne(id); //query
+
+**
+양방향 연관관계인 경우, 한쪽에 @JsonIgnore 무조건!
+Hibernate5Module
+jackson-datatype-hibernate5
+spring3.x 버전인 경우, jackson-datatype-hibernate6
+이것을 방지하기 위해서 DTO 사용
+
+**
+List<> API 작성할 때, List로 감싸지말고 
+제네릭 T 로 감싸기.
+DTO에서 엔테티를 반환하는건 크게 문제가 되지 않는다.
+
+***
+N+1
+N + N + 1 
+ex) Order 조회 1번 결과값 2개 
+같이 연결되어있는 Member , Delivery 각 2번씩 접근
+2 + 2 + 1 = 5
+지연로딩(LAZY) 영속성 컨텐스트에서 조회하므로, 이미 조회된 경우 쿼리를 생략
+-> Fetch Join으로 해결
+
+**
+@PrePersist
+= insert 직전에 실행
+= createdAt, updatedAt 초기값 세팅에 사용
+
+@PreUpdate
+= update 직전에 실행
+= updatedAt 갱신에 사용
+
+***
+createdAt, updatedAt을 공통으로 쓰게 되면 그때는 BaseTimeEntity
+@EnableJpaAuditing
+
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+public abstract class BaseTimeEntity {
+
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+}
+public class AdminUser extends BaseTimeEntity {
+    // 관리자 필드
+}
+
+^^
+
+***
+join fetch
+실무에서 자주 사용하는 기법
+
+의존관계는 한 방향으로 흐른다.
+join fetch 같은 경우, select에서 많은 값들을 가져온다.
+
+dto를 통해서 new 사용 -> select 내용 할당 
+이 둘에 대한 우위는 어려움 (trade-off 존재)
+성능 최적화 측면에서 좋지만, repository 재사용성은 떨어짐.
+
+대부분 성능은 from과 join절에서 진행되는데 
+이 두 관점은 크게 다른게 없음
+
+repository 하위 최적화용 패키지 생성
+
+**
+repository는 순수하게 엔터티 조회하는데 사용
+쿼리 방식 선택 권장 순서
+1. 우선 엔티티를 DTO로 변환하는 방법을 선택한다.
+2. 필요하면 Fetch Join으로 성능 최적화 -> 대부분 성능이슈 해결
+3. 그래도 안되면 DTO로 직접 조회하는 방법 사용
+4. 최후는 네이티브 SQL이나 스프링 JDBC Template 사용해서 SQL 직접 해결
+
+**
+컬렉션조회
+OneToMany
+
+*
+컨트롤러에 Entity 노출하지말자.
+
+**
+DTO 안에서, 엔티티를 참조하고 있다면 그것마저도 DTO 작업하자
+private List<OrderItem> orderItems
+private List<OrderItemDto> orderItems
+Collection일때, FetchJoin은 고민해야될 부분이 있음.
+
+distinct 자체 제공 (dB랑은 조금 다름)
+dB 같은 경우, 모든 칼럼의 데이터가 같을 때, distinct 적용
+1대 다 fetch join 하는 순간, 페이징 X
+
+**
+컬렉션을 Fetch Join 하면 페이징이 불가능
+페이징 + 컬렉션 > 
+1. ToOne(OneToOne, ManyToOne) 관계는 모두 페치조인
+2. hibernate.default_batch_fetch_size, @BatchSize
+
+페이징시, offset = 0 일 경우, hibernate에서 지워버림 
+
+전부 Fetch Join 하는 경우, 중복인 경우가 많다. 
+중복이지만 전부 데이터가 같지 않기 때문에, distinct로 구분
+
+query 쪽은 별도로 구분해서 나누자
+화면쪽에 핏하게 나누는 쿼리는 따로 구분하는 법
+API 도 나누고 Entity에 밀접한 연관있는건 Repository 빼고
+그게 아니면 query/repository
+
+권장순서 (엔티티 조회 방식으로 우선접근)
+1. 페치조인 쿼리 수를 최적화
+2. 컬렉션 최적화
+    1) 페이징 필요: hibernate.default_batch_fetch_size, @BatchSize
+    2) 페이징 필요:X 페치조인
+3. 엔티티 조회 방식으로 안되면 DTO 조회 방식 사용
+4. DTO 조회 방식으로 해결이 안되면 NativeSQL or 스프링 JdbcTemplate
+
+**
+캐시하는건 DTO로 변환해서 DTO로 캐시 (엔티티X)
+
+
+***
+OSIV
+spring.jpa.open-in-view
+
+ON 이면 쿼리서비스, 컨트롤러나 뷰에서 할 수 있음
+OFF 이면 
+
+고객서비스의 실시간 API는 OSIV 끄고,
+ADMIN OSIV 킨다.
+
+***
+querydsl generated 하위 폴더는 git ignore
+
+
