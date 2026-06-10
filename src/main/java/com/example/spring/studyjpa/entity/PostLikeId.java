@@ -14,7 +14,6 @@ import java.io.Serializable;
 @EqualsAndHashCode
 //복합키 필수
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
 public class PostLikeId implements Serializable {
 
     private Long memberId;
