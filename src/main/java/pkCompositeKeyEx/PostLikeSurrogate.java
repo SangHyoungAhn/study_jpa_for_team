@@ -1,5 +1,7 @@
-package com.example.spring.studyjpa.entity;
+package pkCompositeKeyEx;
 
+import com.example.spring.studyjpa.entity.Member;
+import com.example.spring.studyjpa.entity.Post;
 import com.example.spring.studyjpa.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

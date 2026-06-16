@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Embeddable
-//엔티티에 넣는 값
 @Getter
 @EqualsAndHashCode
-//복합키 필수
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostLikeId implements Serializable {
 

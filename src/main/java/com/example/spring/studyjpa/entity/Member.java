@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,5 +25,17 @@ public class Member {
     @JoinColumn(name="dept_id", nullable = false)
     private Department dept;
 
+    @Column(nullable = false)
+    private int activityPoint = 0;
 
+
+    public Member(String name, String email, Department dept){
+        this.name = name;
+        this.email = email;
+        this.dept = dept;
+    }
+
+    public void changeName(String name){
+        this.name = name;
+    }
 }

@@ -13,8 +13,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
-//필드만 자식에게 사용하기 위해서
-//@MappedSuperclass를 작성하지 않으면, 별도의 테이블로 생성한다.
 @EntityListeners(AuditingEntityListener.class)
 public class BaseTimeEntity {
 
@@ -24,7 +22,5 @@ public class BaseTimeEntity {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-
 
 }

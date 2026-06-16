@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -18,5 +20,11 @@ public class Department {
 
     private String deptCode;
     private String deptName;
+
+    public Department(String deptCode, String deptName){
+        this.deptCode = deptCode;
+        this.deptName = deptName;
+    }
+
 
 }
