@@ -220,7 +220,6 @@ public class MemberRepositoryTest {
                 .doesNotThrowAnyException();
     }
 
-
     @Test
     @DisplayName("같은 부서 멤버 2명")
     void findByDeptId_같은부서2명(){
