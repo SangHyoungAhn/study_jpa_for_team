@@ -19,14 +19,22 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
      * 3. 이메일로 중복 체크
      *
      * 4. 벌크 메서드 ***
+     * 5. JPQL
      */
 
     Optional<Member> findByEmail(String email);
-    List<Member> findByDeptId(Long departmentId);
+    List<Member> findByDeptId(Long deptId);
     boolean existsByEmail(String email);
+
+    @Query("select m from Member m where m.name = :name")
+    Optional<Member> findByNameJPQL(@Param("name") String name);
 
     @Modifying
     @Query("UPDATE Member m SET m.activityPoint = m.activityPoint + :amount")
     int addActivityPointToAll(@Param("amount") int amount);
+
+    @Modifying
+    @Query("DELETE FROM Member m WHERE m.email = :email")
+    int deleteByEmailBulk(@Param("email") String email);
 
 }

@@ -22,6 +22,7 @@ public class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @PersistenceContext
+    //@PersistenceContext는 JPA 표준 어노테이션 (이 필드는 영속성컨텍스트)
     EntityManager em;
 
     @Test
@@ -31,7 +32,13 @@ public class MemberRepositoryTest {
         Department dept = new Department("D011", "비즈테크팀");
         em.persist(dept);
 
-        Member savedMember = memberRepository.save(new Member("안상형","shahn0718@donga.com",dept));
+        Member savedMember = memberRepository.save(
+                Member.builder()
+                        .name("안상형")
+                        .email("shahn0718@donga.com")
+                        .dept(dept)
+                        .build()
+        );
         Long savedMemberId = savedMember.getId();
 
         em.flush();
@@ -57,7 +64,13 @@ public class MemberRepositoryTest {
         Department dept = new Department("D011", "비즈테크팀");
         em.persist(dept);
 
-        Member savedMember = memberRepository.save(new Member("안상형","shahn0718@donga.com",dept));
+        Member savedMember = memberRepository.save(
+                Member.builder()
+                        .name("안상형")
+                        .email("shahn0718@donga.com")
+                        .dept(dept)
+                        .build()
+        );
         Long savedMemberId = savedMember.getId();
 
         em.flush();
@@ -72,7 +85,7 @@ public class MemberRepositoryTest {
         System.out.println("m1의 주소: " + System.identityHashCode(m1));
         System.out.println("m2의 주소: " + System.identityHashCode(m2));
 
-        //Assertions.assertThat(m1).isNotSameAs(m2);
+        Assertions.assertThat(m1).isNotSameAs(m2);
         //Assertions.assertThat(m1).isSameAs(m2);
 
     }
@@ -84,7 +97,13 @@ public class MemberRepositoryTest {
         //given
         Department dept = new Department("D011", "비즈테크팀");
         em.persist(dept);
-        Member savedMember = memberRepository.save(new Member("안상형", "shahn0718@donga.com", dept));
+        Member savedMember = memberRepository.save(
+                Member.builder()
+                        .name("안상형")
+                        .email("shahn0718@donga.com")
+                        .dept(dept)
+                        .build()
+        );
         Long savedMemberId = savedMember.getId();
 
         em.flush();
@@ -115,8 +134,20 @@ public class MemberRepositoryTest {
         Department dept = new Department("D011",
                 "비즈테크팀");
         em.persist(dept);
-        Member m1 = memberRepository.save(new Member("안상형", "shahn0718@donga.com", dept));
-        Member m2 = memberRepository.save(new Member("홍길동", "ghdrlfehd@donga.com", dept));
+        Member m1 = memberRepository.save(
+                Member.builder()
+                        .name("안상형")
+                        .email("shahn0718@donga.com")
+                        .dept(dept)
+                        .build()
+        );
+        Member m2 = memberRepository.save(
+                Member.builder()
+                        .name("홍길동")
+                        .email("ghdrlfehd@donga.com")
+                        .dept(dept)
+                        .build()
+        );
 
         //when
         int updated = memberRepository.addActivityPointToAll(100);
@@ -137,7 +168,13 @@ public class MemberRepositoryTest {
         //given
         Department dept = new Department("D011", "비즈테크팀");
         em.persist(dept);
-        Member saved = memberRepository.save(new Member("안상형", "shahn0718@donga.com", dept));
+        Member saved = memberRepository.save(
+                Member.builder()
+                        .name("안상형")
+                        .email("shahn0718@donga.com")
+                        .dept(dept)
+                        .build()
+        );
 
         em.flush();
         em.clear();   // 다시 조회할 때 dept가 '진짜 객체'가 아니라 'LAZY 프록시'로 들어오게
@@ -160,7 +197,13 @@ public class MemberRepositoryTest {
         //given
         Department dept = new Department("D011", "비즈테크팀");
         em.persist(dept);
-        Member saved = memberRepository.save(new Member("안상형", "shahn0718@donga.com", dept));
+        Member saved = memberRepository.save(
+                Member.builder()
+                        .name("안상형")
+                        .email("shahn0718@donga.com")
+                        .dept(dept)
+                        .build()
+        );
 
         em.flush();
         em.clear();
@@ -186,8 +229,20 @@ public class MemberRepositoryTest {
         Department dept = new Department("D011", "비즈테크팀");
         em.persist(dept);
 
-        memberRepository.save(new Member("안상형","shahn0718@donga.com" , dept));
-        memberRepository.save(new Member("장현수","wkdgustn@donga.com",dept));
+        memberRepository.save(
+                Member.builder()
+                        .name("안상형")
+                        .email("shahn0718@donga.com")
+                        .dept(dept)
+                        .build()
+        );
+        memberRepository.save(
+                Member.builder()
+                        .name("장현수")
+                        .email("wkdgustn@donga.com")
+                        .dept(dept)
+                        .build()
+        );
 
 
         //when
