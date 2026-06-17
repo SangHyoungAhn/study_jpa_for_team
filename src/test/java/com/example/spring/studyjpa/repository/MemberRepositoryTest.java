@@ -45,7 +45,6 @@ public class MemberRepositoryTest {
         em.clear();
 
         //when
-
         Member member1 = memberRepository.findById(savedMemberId).get();
         Member member2 = memberRepository.findById(savedMemberId).get();
 
@@ -77,9 +76,7 @@ public class MemberRepositoryTest {
         em.clear();
 
         Member m1 = memberRepository.findById(savedMemberId).get();
-
         em.clear();
-
         Member m2 = memberRepository.findById(savedMemberId).get();
 
         System.out.println("m1의 주소: " + System.identityHashCode(m1));
@@ -122,6 +119,9 @@ public class MemberRepositoryTest {
         Member reloadedMember = memberRepository.findById(savedMemberId).orElseThrow();
         System.out.println("===== dB에서 새로 읽기 =====");
         assertThat(reloadedMember.getName()).isEqualTo("홍길동");
+
+        System.out.println("reloadedMember 주소: " + System.identityHashCode(reloadedMember));
+        System.out.println("findMember 주소: " + System.identityHashCode(findMember));
 
     }
 
