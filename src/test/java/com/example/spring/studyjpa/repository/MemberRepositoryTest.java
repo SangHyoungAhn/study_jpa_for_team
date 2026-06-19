@@ -237,7 +237,7 @@ public class MemberRepositoryTest {
         );
         memberRepository.save(
                 Member.builder()
-                        .name("장현수")
+                        .name("홍길동")
                         .email("wkdgustn@donga.com")
                         .dept(dept)
                         .build()
