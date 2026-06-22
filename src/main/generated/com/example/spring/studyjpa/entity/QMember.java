@@ -22,7 +22,15 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
+    public final com.example.spring.studyjpa.entity.base.QBaseEntity _super = new com.example.spring.studyjpa.entity.base.QBaseEntity(this);
+
     public final NumberPath<Integer> activityPoint = createNumber("activityPoint", Integer.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
+    //inherited
+    public final NumberPath<Long> createdBy = _super.createdBy;
 
     public final QDepartment dept;
 
@@ -31,6 +39,12 @@ public class QMember extends EntityPathBase<Member> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath name = createString("name");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
+
+    //inherited
+    public final NumberPath<Long> updatedBy = _super.updatedBy;
 
     public QMember(String variable) {
         this(Member.class, forVariable(variable), INITS);

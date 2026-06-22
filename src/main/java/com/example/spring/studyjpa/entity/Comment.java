@@ -3,6 +3,7 @@ package com.example.spring.studyjpa.entity;
 import com.example.spring.studyjpa.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,15 @@ public class Comment extends BaseEntity {
     @JoinColumn(name="author_id", nullable = false)
     private Member author;
     //댓글과 작성자 N:1
+
+    @Builder
+    public Comment(String content, Member author){
+        this.content = content;
+        this.author = author;
+    }
+
+    void setPost(Post post){
+        this.post = post;
+    }
+
 }

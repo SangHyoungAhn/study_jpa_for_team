@@ -3,8 +3,12 @@ package com.example.spring.studyjpa.entity;
 import com.example.spring.studyjpa.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,4 +40,31 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="author_id", nullable = false)
     private Member author;
+
+    @OneToMany(mappedBy ="post",
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    // 참고) 컬렉션을 '읽기 전용'으로 노출하면 getComments().add() 같은 우회를 막을 수 있다.
+    //       학습용이라 지금은 꺼둔다. 활성화하려면 java.util.Collections import 추가 필요.
+    // public List<Comment> getComments(){
+    //     return Collections.unmodifiableList(comments);
+    // }
+
+    public void addComment(Comment comment){
+        comments.add(comment);
+        comment.setPost(this);
+    }
+
+    public void removeComment(Comment comment){
+        comments.remove(comment);
+    }
+
+    @Builder
+    public Post(String title, String content, Member author){
+        this.title = title;
+        this.content = content;
+        this.author = author;
+    }
+
 }
