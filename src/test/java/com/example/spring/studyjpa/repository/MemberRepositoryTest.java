@@ -252,5 +252,24 @@ public class MemberRepositoryTest {
         assertThat(members).hasSize(2);
     }
 
+    @Test
+    @DisplayName("컬렉션_초기화하지않을때")
+    void 컬렉션_초기화하지않을때() {
+        // given
+        Department dept = new Department("D011", "비즈테크팀");
+        em.persist(dept);
+
+        // when & then
+        // changeDept() 내부에서 dept.getMembers().add(this) 호출 시
+        // members 필드가 null이므로 NullPointerException 발생
+        assertThatThrownBy(() ->
+                Member.builder()
+                        .name("안상형")
+                        .email("shahn0718@donga.com")
+                        .dept(dept)
+                        .build()
+        ).isInstanceOf(NullPointerException.class);
+    }
+
 
 }
