@@ -9,22 +9,20 @@ spring:
 
 
   jpa:
+    show-sql: false              # @DataJpaTest 기본 'Hibernate:' 줄 끄기 → org.hibernate.SQL 로거만 사용 (로그 중복 제거)
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.orm.jdbc.bind: trace
-  #  sql:
-  #    init:
-  #      mode: always
+        generate_statistics: true   # 쿼리 실행 통계 수집 ON (테스트에서만)
 
   h2:
     console:
       enabled: true
       path: /h2-console
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace

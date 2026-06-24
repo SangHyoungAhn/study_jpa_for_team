@@ -2,14 +2,14 @@ package com.example.spring.studyjpa.entity;
 
 import com.example.spring.studyjpa.entity.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class Member extends BaseEntity {
 
     @Id
@@ -38,6 +38,7 @@ public class Member extends BaseEntity {
     }
 
     public void changeDept(Department dept){
+        Objects.requireNonNull(dept, "부서는 필수입니다.");
         if(this.dept != null){
             this.dept.getMembers().remove(this);
         }

@@ -20,7 +20,7 @@ spring:
         # order_inserts: true   # 같은 테이블 INSERT끼리 정렬해 묶음 효율↑ (※ Member는 IDENTITY라 INSERT는 안 묶임)
         # order_updates: true   # 같은 테이블 UPDATE끼리 정렬 → 변경 감지가 만든 UPDATE가 배치로 묶임
         # generate_statistics: true   # 배치가 실제로 묶였는지 통계 로그로 확인용
-    show-sql: true
+
 
 logging:
   level:

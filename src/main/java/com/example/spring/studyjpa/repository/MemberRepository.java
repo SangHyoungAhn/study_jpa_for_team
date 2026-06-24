@@ -1,6 +1,7 @@
 package com.example.spring.studyjpa.repository;
 
 import com.example.spring.studyjpa.entity.Member;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -39,5 +40,16 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Modifying
     @Query("DELETE FROM Member m WHERE m.email = :email")
     int deleteByEmailBulk(@Param("email") String email);
+
+    @Query("SELECT m FROM Member m JOIN FETCH m.dept")
+    List<Member> findAllWithDept();
+
+//    @Override
+//    @Query("SELECT m FROM Member m JOIN FETCH m.dept")
+//    List<Member> findAll();
+
+//    @Override
+//    @EntityGraph(attributePaths = {"dept"})
+//    List<Member> findAll();
 
 }
