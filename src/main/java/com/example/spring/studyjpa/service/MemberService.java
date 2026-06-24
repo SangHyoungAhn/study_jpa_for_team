@@ -27,8 +27,6 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
-    // 엔티티 → DTO 변환을 '트랜잭션 안(@Transactional readOnly)' 에서 수행
-    // → m.getDept()(LAZY)가 여기서 안전하게 초기화되므로 OSIV 켜짐/꺼짐과 무관하게 동작
     public MemberResponse getMember(Long id){
         Member m = memberRepository.findById(id).orElseThrow();
         return MemberResponse.from(m);
